@@ -91,13 +91,12 @@ fi
 #alias ll='ls -alF'
 #alias la='ls -A'
 #alias l='ls -CF'
-# Aliases
 alias c="clear"                             # Clear the terminal
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
 alias ll='ls -FGlAhp --time-style=long-iso'                       # Preferred 'ls' implementation
-cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+#cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
 alias path='echo -e ${PATH//:/\\n}'         # path: Echo all executable Paths
 #alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'    # lr:  Full Recursive Directory Listing
 alias weather='curl wttr.in/49508'          # Get a simple weather report for home.
@@ -124,6 +123,24 @@ alias getwanaddr='dig +short txt ch whoami.cloudflare @1.0.0.1' # Get the WAN ad
              echo "'$1' is not a valid file"
          fi
     }
+# New 'cd' function for auto activation/deactivation of python venv.
+function cd() {
+  builtin cd "$@"; ll;
+  if [[ -z "$VIRTUAL_ENV" ]] ; then
+    ## If env folder is found then activate the vitualenv
+      if [[ -d ./.venv ]] ; then
+        source ./.venv/bin/activate
+      fi
+  else
+    ## check the current folder belong to earlier VIRTUAL_ENV folder
+    # if yes then do nothing
+    # else deactivate
+      parentdir="$(dirname "$VIRTUAL_ENV")"
+      if [[ "$PWD"/ != "$parentdir"/* ]] ; then
+        deactivate
+      fi
+  fi
+}
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -164,3 +181,4 @@ fi
 if which fortune >/dev/null; then
     fortune
 fi
+
