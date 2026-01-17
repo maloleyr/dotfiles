@@ -16,8 +16,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=10000
+HISTFILESIZE=20000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -87,18 +87,36 @@ fi
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# some more ls aliases
-#alias ll='ls -alF'
-#alias la='ls -A'
-#alias l='ls -CF'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+###############################################################################
+#                       Custom Aliases and Functions                          #
+###############################################################################
 alias c="clear"                             # Clear the terminal
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
-alias ll='ls -FGlAhp --time-style=long-iso'                       # Preferred 'ls' implementation
-#cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+alias ll='ls -FGlAhp --time-style=long-iso' # Preferred 'ls' implementation
 alias path='echo -e ${PATH//:/\\n}'         # path: Echo all executable Paths
-#alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'    # lr:  Full Recursive Directory Listing
 alias weather='curl wttr.in/49508'          # Get a simple weather report for home.
 alias getwanaddr='dig +short txt ch whoami.cloudflare @1.0.0.1' # Get the WAN address for wherever I am.
 #   extract:  Extract most know archives with one command
@@ -146,27 +164,13 @@ function cd() {
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+###############################################################################
+#                   End Custom Aliases and Functions                          #
+###############################################################################
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
-# SSH connection launches tmux.
+#
+## SSH connection launches tmux.
+#
 if [[ "$TMUX" == "" ]] &&
         [[ "$SSH_CONNECTION" != "" ]]; then
     WHOAMI=$(whoami)
@@ -177,8 +181,14 @@ if [[ "$TMUX" == "" ]] &&
     fi
 fi
 
-# Show a random fortune if installed.
+#
+## Show a random fortune if installed.
+#
 if which fortune >/dev/null; then
     fortune
 fi
 
+#
+## Add local bin paths.
+#
+export PATH=$PATH:~/snap:~/bin:~/.local/bin
