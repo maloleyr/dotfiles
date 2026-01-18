@@ -189,6 +189,31 @@ if which fortune >/dev/null; then
 fi
 
 #
+## Ensure that we have our $EDITOR properly defined.
+#
+if [[ $- != *i* ]]; then
+    # Non-interactive shell — do nothing
+    return
+fi
+
+if [[ -n "$SSH_CONNECTION" || -n "$SSH_TTY" ]]; then
+    export VISUAL=nano
+    export EDITOR=nano
+elif [[ -n "$DISPLAY" || -n "$WAYLAND_DISPLAY" ]]; then
+    if command -v subl >/dev/null 2>&1; then
+        export VISUAL="subl -w"
+        export EDITOR="subl -w"
+    else
+        export VISUAL=nano
+        export EDITOR=nano
+    fi
+else
+    export VISUAL=nano
+    export EDITOR=nano
+fi
+
+
+#
 ## Add local bin paths.
 #
 export PATH=$PATH:~/snap:~/bin:~/.local/bin
