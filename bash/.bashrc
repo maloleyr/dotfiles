@@ -117,7 +117,7 @@ alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
 alias ll='ls -FGlAhp --time-style=long-iso' # Preferred 'ls' implementation
 alias path='echo -e ${PATH//:/\\n}'         # path: Echo all executable Paths
-alias weather='curl wttr.in/49508'          # Get a simple weather report for home.
+alias weather='curl wttr.in'          # Get a simple weather report for home.
 alias getwanaddr='dig +short txt ch whoami.cloudflare @1.0.0.1' # Get the WAN address for wherever I am.
 #   extract:  Extract most know archives with one command
 #   ---------------------------------------------------------
