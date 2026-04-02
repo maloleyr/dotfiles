@@ -164,6 +164,9 @@ function cd() {
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+# Fix my keyboard when ibus and snapd fuck up.
+alias fix-keyboard='setsid pkill -f ibus-daemon &>/dev/null'
+
 ###############################################################################
 #                   End Custom Aliases and Functions                          #
 ###############################################################################
